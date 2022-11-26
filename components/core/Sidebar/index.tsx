@@ -10,7 +10,7 @@ const Sidebar = () => {
         navState
           ? `opacity-100 z-[9999] `
           : "opacity-0 md:opacity-100 -z-50 md:z-auto "
-      } md:block transition-all duration-700 ease-in-out fixed inset-y-0 left-0 bg-white shadow-md max-h-screen w-60`}
+      } md:block transition-opacity duration-700 ease-in-out fixed inset-y-0 left-0 bg-white shadow-md max-h-screen w-60 dark:bg-slate-900`}
     >
       <div className="flex flex-col justify-between h-full">
         <div className="flex-grow">
@@ -22,7 +22,7 @@ const Sidebar = () => {
               className="w-7 mr-5 md:hidden"
             />
             <h1 className="text-xl font-bold leading-none">
-              <span className="text-indigo-700">Tehsil</span> App
+              <span className="text-indigo-700">Admin </span>App
             </h1>
           </div>
           <div className="p-4">
