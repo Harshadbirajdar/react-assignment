@@ -1,0 +1,1 @@
+export const API = "https://blue-journalist-bbrpv.ineuron.app:4000"
