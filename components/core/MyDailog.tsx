@@ -35,7 +35,7 @@ const MyDialog = ({ children, title, isOpen, closeModal }: Dialog) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-[80vw] transform  rounded-lg bg-white dark:bg-slate-900 p-6 text-left align-middle shadow-xl transition-all max-h-[80vh] overflow-y-auto">
+                <Dialog.Panel className="w-full md:max-w-[50vw] transform  rounded-lg bg-white dark:bg-slate-900 p-6 text-left align-middle shadow-xl transition-all max-h-[80vh] overflow-y-auto">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900 flex justify-between dark:text-slate-400 mb-5"
