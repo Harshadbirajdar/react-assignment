@@ -8,7 +8,9 @@ import { User } from "../types";
 import { addNewUserApi } from "../service/user";
 import toast from "react-hot-toast";
 import useUserStore from "../store/user";
+import { useState } from "react";
 const AddUser = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -26,17 +28,24 @@ const AddUser = () => {
   const { setAddUserOpen, isAddUserOpen } = useDialogStore();
   const { setAllUser, users } = useUserStore();
 
+  // Add Button Click
   const onAddClick = (data: User) => {
+    setLoading(true);
     if (parseInt(data.age) == 0)
       return setError("age", { message: "Please enter a valid age" });
-    addNewUserApi(data).then((response) => {
-      const { message, data } = response.data;
-      toast.success(message);
-      setAddUserOpen(false);
-      reset();
-      // update new addedd user without given api call
-      setAllUser([...users, data]);
-    });
+    addNewUserApi(data)
+      .then((response) => {
+        setLoading(false);
+        const { message, data } = response.data;
+        toast.success(message);
+        setAddUserOpen(false);
+        reset();
+        // update new addedd user without given api call
+        setAllUser([...users, data]);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
   };
   return (
     <div>
@@ -108,6 +117,7 @@ const AddUser = () => {
             error={errors.age?.message}
           />
           <Button
+            loading={loading}
             className=" flex justify-center"
             onClick={handleSubmit(onAddClick)}
           >
