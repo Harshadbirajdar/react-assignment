@@ -8,3 +8,7 @@ export const getAllUserApi = () => {
 export const addNewUserApi = (user: User) => {
     return AxiosInstances.post("/user/create", user)
 }
+
+export const deleteUserApi = (id: string) => {
+    return AxiosInstances.delete(`/user/${id}`)
+}

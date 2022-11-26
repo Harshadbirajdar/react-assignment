@@ -1,12 +1,129 @@
-import Head from "next/head";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import Base from "../components/core/Base";
-import styles from "../styles/Home.module.css";
+import TableLoading from "../components/skeleton/Table";
+import { deleteUserApi, getAllUserApi } from "../service/user";
+import useUserStore from "../store/user";
+import { User } from "../types";
+import {
+  PencilSquareIcon,
+  TrashIcon,
+  PlusCircleIcon,
+} from "@heroicons/react/24/outline";
+import Button from "../components/core/Button";
+import AddUser from "../components/AddUser";
+import useDialogStore from "../store/dialog";
+import toast from "react-hot-toast";
+const Home = () => {
+  const { setAddUserOpen } = useDialogStore();
+  const { setAllUser, users } = useUserStore();
+  const [loading, setLoading] = useState<boolean>(false);
+  useEffect(() => {
+    setLoading(true);
+    getAllUser();
+  }, []);
 
-export default function Home() {
+  // get All User
+  const getAllUser = () => {
+    getAllUserApi()
+      .then((response) => {
+        console.log(response.data.data);
+        setLoading(false);
+
+        setAllUser(response.data.data);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
+  // delete User by id
+  const deleteBtnClick = (id: string) => {
+    deleteUserApi(id).then((response) => {
+      toast.success(response.data.message);
+      getAllUser();
+    });
+  };
   return (
     <Base>
-      <h1>test</h1>
+      <div className="p-5 ">
+        <AddUser />
+        <Button
+          className="flex w-auto ml-auto mb-5 mr-5"
+          onClick={() => {
+            setAddUserOpen(true);
+          }}
+        >
+          {" "}
+          <PlusCircleIcon className="w-6 mr-2" />
+          Add User
+        </Button>
+        <div className=" overflow-x-auto relative shadow-md sm:rounded-lg">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 capitalize bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="py-3 px-6">
+                  First Name
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Last Name
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Phone Number
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Age
+                </th>
+                <th scope="col" className="py-3 px-6">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <TableLoading colLength={5} />
+              ) : users.length == 0 ? (
+                <tr>
+                  <td className="text-center py-6 px-2" colSpan={5}>
+                    No User Found
+                  </td>
+                </tr>
+              ) : (
+                users.map((data: User) => (
+                  <tr
+                    key={data._id}
+                    className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
+                  >
+                    <th
+                      scope="row"
+                      className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      {data.firstName}
+                    </th>
+                    <td className="py-4 px-6">{data.lastName}</td>
+                    <td className="py-4 px-6">{data.phoneNumber}</td>
+
+                    <td className="py-4 px-6">{data.age}</td>
+                    <td className="py-4 px-6 flex">
+                      <PencilSquareIcon
+                        onClick={() => {}}
+                        className="w-6 mr-3 cursor-pointer text-blue-500"
+                      />
+                      <TrashIcon
+                        onClick={() => {
+                          // @ts-ignore
+                          deleteBtnClick(data._id);
+                        }}
+                        className="w-6 cursor-pointer text-red-500"
+                      />
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </Base>
   );
-}
+};
+
+export default Home;
