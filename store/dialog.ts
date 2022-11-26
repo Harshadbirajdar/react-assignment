@@ -7,6 +7,8 @@ export type Dialog = {
     setAddUserOpen: (open: boolean) => void,
     isEditUserOpen: boolean,
     setEditUserOpen: (open: boolean) => void,
+    isWarningOpen: boolean,
+    setWarningOpen: (open: boolean) => void,
 
 
 }
@@ -22,6 +24,12 @@ const dialogStore = (set: any): Dialog => ({
     setEditUserOpen: ((open) => {
         set(() => ({
             isEditUserOpen: open
+        }))
+    }),
+    isWarningOpen: false,
+    setWarningOpen: ((open) => {
+        set(() => ({
+            isWarningOpen: open
         }))
     }),
 

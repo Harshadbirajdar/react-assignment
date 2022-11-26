@@ -14,9 +14,11 @@ import AddUser from "../components/AddUser";
 import useDialogStore from "../store/dialog";
 import toast from "react-hot-toast";
 import EditUser from "../components/EditUser";
+import WarningMsg from "../components/core/WarningMsg";
 const Home = () => {
   const [activeUser, setActiveUser] = useState<string>("");
-  const { setAddUserOpen, setEditUserOpen, isEditUserOpen } = useDialogStore();
+  const { setAddUserOpen, setEditUserOpen, isEditUserOpen, setWarningOpen } =
+    useDialogStore();
   const { setAllUser, users } = useUserStore();
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
@@ -41,6 +43,7 @@ const Home = () => {
   const deleteBtnClick = (id: string) => {
     deleteUserApi(id).then((response) => {
       toast.success(response.data.message);
+      setWarningOpen(false);
       getAllUser();
     });
   };
@@ -49,6 +52,13 @@ const Home = () => {
       <div className="p-5 ">
         <AddUser />
         {isEditUserOpen && <EditUser id={activeUser} />}
+        <WarningMsg
+          fn={() => {
+            deleteBtnClick(activeUser);
+          }}
+          title="Are You Sure ?"
+          msg="Are you sure you want to delete the user"
+        />
         <Button
           className="flex w-auto ml-auto mb-5 mr-5"
           onClick={() => {
@@ -119,7 +129,8 @@ const Home = () => {
                       <TrashIcon
                         onClick={() => {
                           // @ts-ignore
-                          deleteBtnClick(data._id);
+                          setActiveUser(data._id);
+                          setWarningOpen(true);
                         }}
                         className="w-6 cursor-pointer text-red-500"
                       />
