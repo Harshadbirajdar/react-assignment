@@ -6,8 +6,6 @@ import { User } from "../types";
 export type UserStore = {
     users: User[],
     setAllUser: (user: User[]) => void,
-
-
 }
 
 const userStore = (set: any): UserStore => ({
